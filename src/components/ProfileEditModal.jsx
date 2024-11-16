@@ -6,11 +6,12 @@ export const ProfileEditModal = ({onClose,username,onProfileUpdated}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        console.log(profilePicture)
         const formData = new FormData();
         formData.append("profile_picture", profilePicture);
         try {
            const response = await updateProfilePictore(formData,username);
-           if (response.status === 200) {
+           if (response) {
                onProfileUpdated();
                onClose();
            }
@@ -34,7 +35,7 @@ export const ProfileEditModal = ({onClose,username,onProfileUpdated}) => {
                         <label htmlFor="profilePicture">Subir Foto de Perfil:</label>
                         <input type="file" style={{marginTop: "10px"}} id="profilePicture" onChange={hadleFileChange} name={"profile_picture"} accept={"image/*"} required/>
                         <button type="submit" style={{marginTop: "20px", marginBottom: "20px"}}>Guardar</button>
-                        <button type="button">Cancelar</button>
+                        <button type="button" onClick={onClose}>Cancelar</button>
                     </form>
                     <div/>
                 </div>

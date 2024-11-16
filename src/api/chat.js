@@ -35,7 +35,7 @@ export const getMessages = async () => {
 
 export const getAuthorByUsername = async (username) => {
     try {
-        const response = await fetch(ApiUrl + "authors/" + username, {
+        const response = await fetch(ApiUrl + "authors/" + username+"/", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -50,11 +50,8 @@ export const getAuthorByUsername = async (username) => {
 export const updateProfilePictore = async (formData, username) => {
     try {
         const author = await getAuthorByUsername(username)
-        const response = await fetch(ApiUrl + "authors/" + author?.id + "/profile_picture", {
+        const response = await fetch(ApiUrl + "authors/" + author?.id + "/profile_picture/", {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
             body: formData
         });
         return response.json();
