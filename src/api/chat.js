@@ -49,13 +49,28 @@ export const getAuthorByUsername = async (username) => {
 
 export const updateProfilePictore = async (formData, username) => {
     try {
-        const author = await getAuthorByUsername(username)
-        const response = await fetch(ApiUrl + "authors/" + author?.id + "/profile_picture/", {
+        const author = await getAuthorByUsername(username);
+        if (!author?.id) {
+            throw new Error('No se pudo obtener el ID del autor');
+        }
+
+        const response = await fetch(ApiUrl + "authors/" + author.id + "/profile_picture/", {
             method: "POST",
-            body: formData
+            // Removemos el header Content-Type para que el navegador establezca el correcto con el boundary
+            body: formData,
+            // Agregamos credentials si es necesario para las cookies
+            credentials: 'include',
         });
+
+        if (!response.ok) {
+            // Intentamos obtener el mensaje de error del servidor
+            const errorData = await response.json().catch(() => null);
+            throw new Error(errorData?.error || `Error ${response.status}: ${response.statusText}`);
+        }
+
         return response.json();
     } catch (error) {
-        console.log("Error al enviar el mensaje: ", error)
+        console.error("Error al actualizar la foto de perfil:", error);
+        throw error; // Re-lanzamos el error para manejarlo en el componente
     }
 }
