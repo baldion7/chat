@@ -51,7 +51,7 @@ export const updateProfilePictore = async (formData, username) => {
     try {
         const author = await getAuthorByUsername(username)
         const response = await fetch(ApiUrl + "authors/" + author?.id + "/profile_picture/", {
-            method: "PUT",
+            method: "POST",
             body: formData
         });
         return response.json();
