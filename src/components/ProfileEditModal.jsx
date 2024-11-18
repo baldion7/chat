@@ -1,10 +1,20 @@
-import { useState } from "react";
-import { updateProfilePictore } from "../api/chat.js";
+import {useState} from "react";
+import {updateProfilePictore} from "../api/chat.js";
 
-export const ProfileEditModal = ({ onClose, username, onProfileUpdated }) => {
+export const ProfileEditModal = ({onClose, username, onProfileUpdated}) => {
     const [profilePicture, setProfilePicture] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    // Función para convertir archivo a Base64
+    const convertToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => reject(error);
+        });
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -28,11 +38,13 @@ export const ProfileEditModal = ({ onClose, username, onProfileUpdated }) => {
                 throw new Error('La imagen no debe superar los 5MB');
             }
 
-            const formData = new FormData();
-            formData.append("profile_picture", profilePicture);
+            // Convertir imagen a Base64
+            const base64Image = await convertToBase64(profilePicture);
 
-            const response = await updateProfilePictore(formData, username);
+            // Crear objeto con la imagen en base64
 
+            const response = await updateProfilePictore(base64Image, username);
+            console.log(response)
             if (response) {
                 onProfileUpdated();
                 onClose();
@@ -71,10 +83,10 @@ export const ProfileEditModal = ({ onClose, username, onProfileUpdated }) => {
                         accept="image/*"
                         required
                         disabled={isLoading}
-                        style={{ marginTop: "10px" }}
+                        style={{marginTop: "10px"}}
                     />
                     {profilePicture && (
-                        <div style={{ marginTop: "10px" }}>
+                        <div style={{marginTop: "10px"}}>
                             <img
                                 src={URL.createObjectURL(profilePicture)}
                                 alt="Vista previa"
@@ -85,11 +97,11 @@ export const ProfileEditModal = ({ onClose, username, onProfileUpdated }) => {
                             />
                         </div>
                     )}
-                    <div style={{ marginTop: "20px" }}>
+                    <div style={{marginTop: "20px"}}>
                         <button
                             type="submit"
                             disabled={isLoading || !profilePicture}
-                            style={{ marginRight: "10px" }}
+                            style={{marginRight: "10px"}}
                         >
                             {isLoading ? 'Guardando...' : 'Guardar'}
                         </button>
