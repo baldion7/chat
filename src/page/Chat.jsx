@@ -25,11 +25,11 @@ export const Chat = () => {
         setUsername(localStorage.getItem("chatUsername"));
         fetchMessages();
 
-        /* const interval = setInterval(() => {
+         const interval = setInterval(() => {
              fetchMessages();
          }, 1000);
 
-         return () => clearInterval(interval);*/
+         return () => clearInterval(interval);
     }, []);
 
 

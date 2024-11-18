@@ -1,4 +1,4 @@
-export const ApiUrl = "https://chat-backen-virid.vercel.app//chat/";
+export const ApiUrl = "https://chat-backen-virid.vercel.app/chat/";
 
 export const createMesage = async (data) => {
     try {
