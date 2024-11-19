@@ -88,7 +88,7 @@ export const Chat = () => {
                 {showProfileModal && <ProfileEditModal onClose={() => setShowProfileModal(false)} username={username}
                                                        onProfileUpdated={fetchMessages}/>}
             </div>
-            <MessageList messages={messages} username={User} onDeleteMessage={setOnDeleteMessage}/>
+            {User &&  <MessageList messages={messages} username={User} onDeleteMessage={setOnDeleteMessage}/>}
             <MessageForm onMessageSent={fetchMessages}/>
         </div>
     );
