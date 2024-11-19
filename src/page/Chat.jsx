@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import  {useEffect, useState} from 'react';
 import {ApiUrl, DeleteMessage, getMessages, updateStatus} from '../api/chat.js';
 import {MessageList} from '../components/MessageList.jsx';
 import {MessageForm} from '../components/MessageForm.jsx';
@@ -88,7 +88,7 @@ export const Chat = () => {
                 {showProfileModal && <ProfileEditModal onClose={() => setShowProfileModal(false)} username={username}
                                                        onProfileUpdated={fetchMessages}/>}
             </div>
-            {User &&  <MessageList messages={messages} username={User} onDeleteMessage={setOnDeleteMessage}/>}
+           <MessageList messages={messages} username={User} onDeleteMessage={setOnDeleteMessage}/>
             <MessageForm onMessageSent={fetchMessages}/>
         </div>
     );

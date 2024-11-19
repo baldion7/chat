@@ -50,6 +50,7 @@ export const MessageList = ({ messages, username, onDeleteMessage }) => {
             </span>
         );
     };
+
     const downloadBase64PDF = (base64Data, fileName = 'documento.pdf') => {
         try {
             // Remover el prefijo de data URL si existe
@@ -128,67 +129,82 @@ export const MessageList = ({ messages, username, onDeleteMessage }) => {
         );
     };
 
+    // Verificar si hay mensajes
+    if (!messages || messages.length === 0) {
+        return <div className="message-list">No hay mensajes para mostrar</div>;
+    }
+
     return (
         <div className="message-list">
             <div className="message-list-container">
-                {messages?.map(message => (
-                    <div
-                        key={message.id}
-                        className={`message-item ${
-                            message.author.id === username.id ? 'message-sent' : 'message-received'
-                        }`}
-                    >
-                        <div className="message-avatar">
-                            <img
-                                src={message.author.profile_picture || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
-                                alt={message.author.name}
-                                className="avatar-image"
-                            />
-                        </div>
-                        <div className="message-content">
-                            <div className="message-header">
-                                <span className="message-author">{message.author.name}</span>
-                                <span className={`author-status ${message.author.state ? 'status-active' : 'status-inactive'}`}/>
+                {messages.map(message => {
+                    // Verificar si el mensaje y el autor son válidos
+                    if (!message || !message.author) {
+                        return null;
+                    }
+
+                    // Verificar si el username existe y tiene un id antes de hacer la comparación
+                    const isCurrentUser = username?.id && message.author.id === username.id;
+
+                    return (
+                        <div
+                            key={message.id}
+                            className={`message-item ${
+                                isCurrentUser ? 'message-sent' : 'message-received'
+                            }`}
+                        >
+                            <div className="message-avatar">
+                                <img
+                                    src={message.author.profile_picture || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
+                                    alt={message.author.name || "Usuario"}
+                                    className="avatar-image"
+                                />
                             </div>
-                            <div className="message-bubble">
-                                {message.content && (
-                                    <div className="message-text-content">
-                                        {formatMessage(message.content)}
-                                    </div>
-                                )}
-                                {renderMedia(message)}
-                                <div className="message-info">
-                                    <span className="message-timestamp">
-                                        {formatearFecha(message.create_at)}
-                                    </span>
-                                    {message.author.id === username.id && (
-                                        <button
-                                            onClick={() => onDeleteMessage(message.id)}
-                                            className="delete-message-btn"
-                                            aria-label="Eliminar mensaje"
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="16"
-                                                height="16"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            >
-                                                <path d="M3 6h18"></path>
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
-                                                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                            </svg>
-                                        </button>
+                            <div className="message-content">
+                                <div className="message-header">
+                                    <span className="message-author">{message.author.name || "Usuario"}</span>
+                                    <span className={`author-status ${message.author.state ? 'status-active' : 'status-inactive'}`}/>
+                                </div>
+                                <div className="message-bubble">
+                                    {message.content && (
+                                        <div className="message-text-content">
+                                            {formatMessage(message.content)}
+                                        </div>
                                     )}
+                                    {renderMedia(message)}
+                                    <div className="message-info">
+                                        <span className="message-timestamp">
+                                            {formatearFecha(message.create_at)}
+                                        </span>
+                                        {isCurrentUser && (
+                                            <button
+                                                onClick={() => onDeleteMessage(message.id)}
+                                                className="delete-message-btn"
+                                                aria-label="Eliminar mensaje"
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                >
+                                                    <path d="M3 6h18"></path>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                                                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                </svg>
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );
