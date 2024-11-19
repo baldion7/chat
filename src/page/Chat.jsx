@@ -3,6 +3,7 @@ import {ApiUrl, DeleteMessage, getMessages, updateStatus} from '../api/chat.js';
 import {MessageList} from '../components/MessageList.jsx';
 import {MessageForm} from '../components/MessageForm.jsx';
 import {ProfileEditModal} from "../components/ProfileEditModal.jsx";
+import {useNavigate} from "react-router-dom";
 
 
 export const Chat = () => {
@@ -11,6 +12,7 @@ export const Chat = () => {
     const [showProfileModal, setShowProfileModal] = useState(false)
     const [User, setUser] = useState()
     const [onDeleteMessage, setOnDeleteMessage] = useState()
+    const navigate = useNavigate();
 
     const fetchMessages = async () => {
         try {
@@ -23,6 +25,9 @@ export const Chat = () => {
 
     useEffect(() => {
         setUsername(localStorage.getItem("chatUsername"));
+        if (username){
+            navigate("/chat");
+        }
         fetchMessages();
 
          const interval = setInterval(() => {

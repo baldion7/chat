@@ -8,6 +8,7 @@ export const Lobby = () => {
     async function handleSubmit(e) {
         e.preventDefault();
         localStorage.setItem("chatUsername", username);
+
         navigate("/chat");
     }
 
