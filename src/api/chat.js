@@ -2,6 +2,7 @@ export const ApiUrl = "https://chat-backen-virid.vercel.app/chat/";
 
 export const createMesage = async (data) => {
     try {
+        console.log(data)
         const response = await fetch(ApiUrl + "create_message/", {
             method: "POST",
             headers: {
@@ -16,6 +17,7 @@ export const createMesage = async (data) => {
                 }
             ),
         });
+        console.log("heloo", response)
         return response.json();
     } catch (error) {
         console.log("Error al enviar el mensaje: ", error)
@@ -30,6 +32,7 @@ export const getMessages = async () => {
                 "Content-Type": "application/json",
             },
         });
+        console.log(response, "response")
         return response.json();
     } catch (error) {
         console.log("Error al enviar el mensaje: ", error)
@@ -91,6 +94,7 @@ export const updateStatus = async (formData, username) => {
 }
 
 export const DeleteMessage = async (formData) => {
+    console.log(formData)
     try {
         const response = await fetch(ApiUrl + "delete_message/" + formData + "/", {
             method: "DELETE",
